@@ -1,0 +1,49 @@
+ {% load thumbnail %}
+<div class="col-sm-12 padding-right">
+                <div class="category-tab"><!--category-tab-->
+                    <div class="col-sm-12">
+                        <a href="shop-2.html"><h2 class="title text-center">برند های استارمارکتی</h2></a>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane fade active in" id="Tab_001">
+                            {% for item in Brands %}
+                                <div class="col-sm-3">
+                                    <div class="product-image-wrapper">
+                                        <div class="single-products">
+                                            <div class="productinfo text-center">
+
+                                                {% thumbnail item.image_field "268x250" crop="center" as im %}
+                                                    <a href="{% url 'brand' brand=item.url_field %}">
+                                                    <img src="{{ im.url }}" width="{{ im.width }}"
+                                                         height="{{ im.height }}">
+                                                    </a>
+                                                {% endthumbnail %}
+
+
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% if Brands.has_previous %}
+                    <a class="left control-carousel hidden-xs" data-slide="prev"
+                       href=?pagebuy={{ Brands.previous_page_number }}"
+                       data-slide="prev">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                {% endif %}
+                {% if Brands.has_next %}
+                    <a class="right control-carousel hidden-xs" href="?br_page={{ Brands.next_page_number }}"
+                       data-slide="next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                {% endif %}
+
+
+            </div>

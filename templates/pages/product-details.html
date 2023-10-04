@@ -1,0 +1,553 @@
+{% extends 'base/basepage.html' %}
+{% load humanize %}
+{% load static %}
+{% load render_partial %}
+{% load thumbnail %}
+{% block cssblock %}
+
+
+{% endblock %}
+{% block content %}
+    {# -------------------------------------------- #}
+    <div class="container" id="AllImages"
+         style="overflow: scroll;border-radius: 2px;background: white;left:0;right:0;margin-left:auto;margin-right:auto;border: #e7a144 1px solid;z-index: +5;display: inline;text-align: center;height:700px;position: absolute;display: none">
+        <p>
+        <div style="width: 20px;height: 20px;background: red">
+            <a href="#" onclick="HideAllImages()" style="color: #5e5e5e"><i
+                    class="fa fa-times"></i></a>
+        </div>
+        </p>
+        <div class="col-ms-12" style="margin-top: 10px">
+
+
+            {% for imagefield in Product.product.ProductMain.all %}
+                <div class="col-sm-4">
+                    <div class="product-image-wrapper">
+                        <div class="single-products">
+                            <div class="productinfo text-center">
+                                {% thumbnail imagefield.image "258x280" crop="center" as im %}
+                                    <a href="http://127.0.0.1:8000/{{ im.url }}"> <img src="{{ im.url }}"
+                                                                                       width="{{ im.width }}"
+                                                                                       height="{{ im.height }}"></a>
+                                {% endthumbnail %}
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            {% for imagefield in Product.product.AutherImage.all %}
+                <div class="col-sm-4">
+                    <div class="product-image-wrapper">
+                        <div class="single-products">
+                            <div class="productinfo text-center">
+                                {% thumbnail imagefield.image "258x280" crop="center" as im %}
+                                    <a href="http://127.0.0.1:8000/{{ im.url }}"><img src="{{ im.url }}"
+                                                                                      width="{{ im.width }}"
+                                                                                      height="{{ im.height }}"></a>
+                                {% endthumbnail %}
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+    {# -------------------------------------------- #}
+    <section>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-9 padding-right">
+                    <div class="product-details"><!--product-details-->
+                        <div class="col-sm-5">
+                            <div class="view-product">
+                                {% if Product.product.CountAll == 0 %}
+                                    <div style="height: 40px;width: 40px;border-radius: 50%;background: #FD9B18;padding-top: 7px;color: #696763;position: absolute;right: 0;top: 0">
+                                        ناموجود
+                                    </div>
+                                {% endif %}
+                                {% thumbnail Product.product.ProductMain.first.image "268x250" crop="center" as im %}
+                                    <img id="DetailImage" src="{{ im.url }}" width="{{ im.width }}"
+                                         height="{{ im.height }}">
+                                {% endthumbnail %}
+
+
+
+                                <a href="#"
+                                   onclick="chekhlike('{{ request.user.is_authenticated }}','{{ Product.product.id }}')">
+                                    <h3 style="background: white;color: #3A3A3A">
+                                        {{ Product.product.count_like }}{% if like_status %}
+                                            <i o style="width: 10px;color: darkred;height: 10px" class="fa fa-heart"
+                                               aria-hidden="true"></i>
+                                        {% else %}
+                                            <i style="width: 10px;color: darkred;height: 10px" class="fa fa-heart-o"
+                                               aria-hidden="true"></i>
+                                        {% endif %}
+                                    </h3></a>
+                                <h6 style="text-align: center"><a href="#" onclick="ShowAllImages()"
+                                                                  style="color: #5e5e5e">مشاهده تصاویر بیشتر</a></h6>
+                            </div>
+                            <div id="similar-product" class="carousel slide" data-ride="carousel">
+
+                                <!-- Wrapper for slides -->
+                                <div class="carousel-inner">
+                                    <div class="item"></div>
+                                    {% for obj in page_obj %}
+                                        <button style="border: none" onclick="changeImage('{{ obj.image.url }}')"><img
+                                                src="{{ obj.image.url }}" style="width: 85px;height: 85px" alt="">
+                                        </button>
+
+
+                                    {% endfor %}
+                                </div>
+
+
+                                <!-- Controls -->
+
+
+
+
+                                {% if page_obj.has_next %}
+                                    <a class="right item-control" href="?page={{ page_obj.next_page_number }}"
+                                       data-slide="next">
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                {% endif %}
+                                {% if page_obj.has_previous %}
+                                    <a class="left item-control" href=?page={{ page_obj.previous_page_number }}"
+                                       data-slide="prev">
+                                        <i class="fa fa-angle-left"></i>
+                                    </a>
+                                {% endif %}
+
+
+                            </div>
+
+                        </div>
+                        <form id="myNameForm">
+                            {% csrf_token %}
+                            <div class="col-sm-7">
+                                <div class="product-information"><!--/product-information-->
+                                    <img src="images/product-details/new.png" class="newarrival" alt=""/>
+                                    <div>
+                                        <h2 id="product_name">{{ Product.product.name }}</h2>
+                                        <p>کد محصول : {{ Product.product.id }}</p>
+                                    </div>
+                                    <input type="hidden" name="type" value="{{ Product.product.name_class }}">
+                                    <div>
+									<span>
+										<span>قیمت : {{ Product.product.price | intcomma }} ريال</span>
+									</span>
+                                        <span>
+										<label>تعداد :</label>
+										<input name="Count" type="text" required value="1" class="search_box"/>
+										<button type="submit" value="submit" id="submitButton"
+                                                class="btn btn-fefault cart">
+											<i class="fa fa-shopping-cart"></i>
+											افـزودن به سبـد خریـد
+										</button>
+
+
+
+									</span>
+
+                                    </div>
+                                    <div>
+                                        {% if Product.product.CountAll == 0 %}
+
+                                            <p style="color:red;font-size: 20px;" class="text-danger" id="messge_count">
+                                                عدم
+                                                موجودی انبار</p>
+                                        {% else %}
+                                            <p style="font-size: 20px" id="messge_count"></p>
+                                        {% endif %}
+
+
+                                        {#                                        <p><b>برنـد :</b> {{ Product.product.brand }} </p>#}
+                                    </div>
+                                    <div>
+                                        {% if Product.product.name_class == 'Pooshak' %}
+                                            {% for Detail in Product.product.ProductMain.all %}
+                                                <div style="display: none;"
+                                                     class="all_size"
+                                                     id="detail{{ Detail.id }}">
+                                                    {% for detail_posh in Detail.detail_pooshak.all %}
+                                                        <span style="background: #c0bebe;border-radius: 30%;height: 30px">
+                                                        <label style="font-size: 20px;margin-right: 10px;margin-bottom: 10px"
+                                                               for="detailposh{{ detail_posh.id }}">{{ detail_posh.size }}</label>
+                                                        <input onclick="checkcount('{{ detail_posh.count }}')"
+                                                               style="width: 30px;height: 20px;accent-color: grey"
+                                                               id="detailposh{{ detail_posh.id }}" type="radio"
+                                                               name="PooshakID" value="{{ detail_posh.id }}">
+                                                        </span>
+
+                                                    {% endfor %}
+                                                </div>
+                                            {% endfor %}
+
+                                        {% endif %}
+
+                                    </div>
+                                    {# sizesss #}
+
+                                    <div class="item">
+                                        {% for item in Product.product.ProductMain.all %}
+                                            <div class="circle_50"
+                                                 style="display: inline-block;margin-bottom: 2px;border: 2px #FE980F solid;height: 30px;width: 55px;background:{{ item.color_code }};border-radius: 50px;padding: 1px 0 0 0">
+                                                <input required
+                                                       class="pull-left" name="DetailID"
+                                                       onclick="changeimage2('{{ item.image.url }}','{{ item.count }}','{{ Product.product.name_class }}','{{ item.id }}')"
+                                                       value="{{ item.id }}" type="radio"
+                                                       style="accent-color: {{ item.color_code }};margin: 0 !important;width: 25px;height: 25px">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div><!--/product-information-->
+                            </div>
+                        </form>
+                    </div><!--/product-details-->
+                    {# start scraper and show price#}
+                    <div class="recommended_items">
+                        <h2 class="title text-center">قیمت محصول در وب سایت های دیگر</h2>
+
+                        <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner" id="scroll_price">
+                            {% render_partial 'selenium_app.views.scrape_price' name_product=name_product %}
+
+                            </div>
+                            <a class="left recommended-item-control" href="#recommended-item-carousel"
+                               data-slide="prev">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a class="right recommended-item-control" href="#recommended-item-carousel"
+                               data-slide="next">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {# end scraper and show price#}
+                    <br>
+                    <br>
+                    <div class="category-tab shop-details-tab"><!--category-tab-->
+                        <div class="col-sm-12">
+                            <ul class="nav nav-tabs">
+                                <li><a id="detail_pro" style="background: #FE980F;color: #FFFFFF"
+                                       onclick="show_details()" href="" data-toggle="tab">جزئیات</a></li>
+
+
+                                <li class=""><a id="commet_bold" class="" onclick="show_comments()" href=""
+                                                data-toggle="tab">مشاهده نظرات
+                                    ({{ Comments.count }})</a></li>
+                            </ul>
+                        </div>
+
+
+                        <div class="tab-content">
+
+
+                            <div class="tab-pane fade active in" id="reviews">
+                                <div class="col-sm-12">
+
+
+                                    {# bbb #}
+                                    <table id="detail_content" class="table table-bordered">
+                                        <tbody>
+                                        {% for value,field in fields %}
+                                            <tr>
+
+                                                <td class="col"> {{ field }} </td>
+                                                <td class="col"> {{ value }} </td>
+                                            </tr>
+                                        {% endfor %}
+
+
+                                        </tbody>
+                                    </table>
+
+                                    {% for cooment in Comments %}
+                                        <ul class="hide_comment" style="display: none">
+                                            <li><a href=""><i
+                                                    class="fa fa-user"></i>{{ cooment.name }} {{ cooment.lname }}</a>
+                                            </li>
+                                            <li><a href=""><i class="fa fa-clock-o"></i>{{ cooment.time }}</a></li>
+                                            <li><a href=""><i class="fa fa-calendar-o"></i>{{ cooment.date }}</a></li>
+                                        </ul>
+                                        <p class="hide_comment"
+                                           style="background: #F2F2F2;min-height: 80px;display: none">{{ cooment.massege }}</p>
+                                    {% endfor %}
+                                    <br>
+                                    <p><b>نظـر خود را بنویسیـد</b></p>
+
+                                    <form>
+										<span>
+											<input required name="fname_comment" type="text" placeholder="نام"/>
+											<input required name="lname_comment" type="text"
+                                                   placeholder="نام خانوادگی"/>
+
+										</span>
+                                        <textarea required id="text_comment"></textarea>
+                                        <button
+                                                type="button"
+                                                onclick="save_comment('{{ Product.product.id }}','{{ request.user.is_authenticated }}')"
+                                                value="ارسال" style="background: #FE980F"
+                                                class="btn btn-default pull-left">ارسال
+                                        </button>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div><!--/category-tab-->
+
+                    <div class="recommended_items"><!--recommended_items-->
+                        <h2 class="title text-center">محصولات پیشنهادی</h2>
+
+                        <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="">
+
+                                    {% for simlar in page_similr %}
+                                        <div class="col-sm-4">
+                                            <div class="product-image-wrapper">
+                                                <div class="single-products">
+                                                    <div class="productinfo text-center">
+                                                        {% thumbnail simlar.ProductMain.first.image "287x134" crop="center" as im %}
+                                                            <img id="DetailImage" src="{{ im.url }}"
+                                                                 width="{{ im.width }}"
+                                                                 height="{{ im.height }}">
+                                                        {% endthumbnail %}
+                                                        <h2>{{ simlar.price }} تومان</h2>
+                                                        <p>{{ simlar.name }}</p>
+                                                        <a href="{% url 'detail' id=simlar.id %}" type="button"
+                                                           class="btn btn-default add-to-cart"><i
+                                                                class="fa fa-shopping-cart"></i>مشاهده و افزودن به سبـد
+                                                            خریـد
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                            </div>
+                            {% if page_similr.has_previous %}
+                                <a class="left recommended-item-control"
+                                   href="?pagesimilar={{ page_similr.previous_page_number }}"
+                                   data-slide="prev">
+                                    <i class="fa fa-angle-left"></i>
+                                </a>
+                            {% endif %}
+                            {% if page_similr.has_next %}
+                                <a class="right recommended-item-control"
+                                   href="?pagesimilar={{ page_similr.next_page_number }}"
+                                   data-slide="next">
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div><!--/recommended_items-->
+
+                </div>
+
+
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+                        <h2>دسته بندی محصولات</h2>
+                        <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+                            {% render_partial 'Product.views.render_categorize' %}
+                        </div><!--/category-productsr-->
+
+                        <div class="brands_products"><!--brands_products-->
+                            <h2>برنـد ها</h2>
+                            {% render_partial 'Product.views.render_brands' %}
+                        </div><!--/brands_products-->
+
+
+                        <div class="shipping text-center"><!--shipping-->
+                            <img src="{% static "images/home/shipping.jpg" %}" alt=""/>
+                        </div><!--/shipping-->
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}
+{% block addscript %}
+    <script>
+        {#       change image of image            #}
+        $('input[name=DetailID]:checked').removeAttr('checked');
+        $('input[name=PooshakID]:checked').removeAttr('checked');
+
+        function changeImage(imageurl) {
+            document.getElementById('DetailImage').attributes['src'].value = imageurl;
+        }
+
+        {#       change image of color            #}
+
+        function changeimage2(imageurl2, itemcount, class_name, id) {
+            document.getElementById('DetailImage').attributes['src'].value = imageurl2;
+            if (class_name != 'Pooshak') {
+                if (itemcount > 0) {
+                    document.getElementById('messge_count').innerText = 'در انبار موجود می باشد.';
+                    document.getElementById('messge_count').style.color = 'green';
+                } else {
+                    document.getElementById('messge_count').innerText = 'در انبار موجود نمی باشد.';
+                    document.getElementById('messge_count').style.color = 'red';
+                }
+            } else {
+
+                var hide_size = document.getElementsByClassName('all_size')
+                for (var i = 0; i < hide_size.length; i++) {
+                    hide_size[i].style.display = 'none';
+                }
+                document.getElementById('detail' + id).style.display = '';
+                $('input[name=PooshakID]:checked').removeAttr('checked');
+                document.getElementById('messge_count').innerText = '';
+
+
+            }
+        }
+
+        {#         show comment           #}
+
+        function show_comments() {
+            var tagclass = document.getElementsByClassName('hide_comment');
+            for (var i = 0; i < tagclass.length; i++) {
+                tagclass[i].style.display = '';
+
+            }
+            document.getElementById('detail_content').style.display = 'none';
+            document.getElementById('detail_pro').style.background = '#40403E';
+            document.getElementById('commet_bold').style.background = '#FE980F';
+            document.getElementById('detail_pro').style.color = '#B3AFA8';
+            document.getElementById('commet_bold').style.color = '#FFFFFF';
+
+        }
+
+        function show_details() {
+            var tagclass = document.getElementsByClassName('hide_comment');
+            for (var i = 0; i < tagclass.length; i++) {
+                tagclass[i].style.display = 'none';
+
+            }
+            document.getElementById('detail_content').style.display = '';
+            document.getElementById('commet_bold').style.background = '#40403E';
+            document.getElementById('detail_pro').style.background = '#FE980F';
+            document.getElementById('commet_bold').style.color = '#B3AFA8';
+            document.getElementById('detail_pro').style.color = '#FFFFFF';
+        }
+
+        $('#submitButton').click(function (event) {
+            event.preventDefault()
+            var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val()
+            var count = $('input[name=Count]').val()
+            var detailID = $('input[name=DetailID]:checked').val()
+            var context = {}
+            if ($('input[name=type]').val() == 'Pooshak') {
+                var pooshakid = $('input[name=PooshakID]:checked').val()
+                context = {Count: count, DetailID: detailID, PooshakID: pooshakid, csrfmiddlewaretoken: CSRFtoken}
+            } else {
+                var detailID = $('input[name=DetailID]:checked').val()
+                context = {Count: count, DetailID: detailID, csrfmiddlewaretoken: CSRFtoken}
+            }
+
+            $.post('', context).then(res => {
+                Swal.fire(
+                    res.message,
+                    '',
+                    res.state
+                )
+            })
+        });
+
+
+        function checkcount(count) {
+            if (count > 0) {
+                document.getElementById('messge_count').innerText = 'در انبار موجود است';
+                document.getElementById('messge_count').style.color = 'green';
+            } else {
+                document.getElementById('messge_count').innerText = 'عدم موجودی انبار';
+                document.getElementById('messge_count').style.color = 'red';
+            }
+        }
+
+
+        function chekhlike(state_user, id) {
+            if (state_user == 'True') {
+                $.get('http://127.0.0.1:8000/like/' + id);
+                window.location.reload()
+
+            } else {
+                Swal.fire(
+                    'برای پسنیدن محصولات وارد سایت شوید!',
+                    '',
+                    'error'
+                )
+            }
+        }
+
+        function save_comment(id, state_user) {
+
+            if (state_user == 'True') {
+                var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
+                var fname = $('input[name=fname_comment]').val();
+                var lname = $('input[name=lname_comment]').val();
+                var text_comment = $('#text_comment').val();
+                context = {
+                    Fname: fname,
+                    Lname: lname,
+                    TextComment: text_comment,
+                    csrfmiddlewaretoken: CSRFtoken,
+                    id: id
+                }
+                $.post('http://127.0.0.1:8000/new_comment/', context);
+                $('input[name=fname_comment]').val('');
+                $('input[name=lname_comment]').val('');
+                $('#text_comment').val('');
+                window.location.reload()
+            } else {
+                swal.fire(
+                    'برای نظر دادن ابتدا وارد سایت شوید!',
+                    '',
+                    'error'
+                )
+            }
+
+        }
+
+        function ShowAllImages() {
+            document.getElementById('AllImages').style.display = ''
+        }
+
+        function simpleFunction() {
+            console.log('kml');
+            var name_product = document.getElementById('product_name').innerText;
+
+            console.log(name_product);
+
+            $.get('http://127.0.0.1:8000/scrape?name_product=' + name_product).then(res => {
+                console.log(res)
+                document.getElementById('scroll_price').html(res);
+            })
+        }
+
+
+        Window.onload = simpleFunction();
+
+    </script>
+
+
+
+{% endblock %}

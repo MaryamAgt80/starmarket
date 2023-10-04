@@ -1,0 +1,207 @@
+{% extends 'base/basepage.html' %}
+{% load thumbnail %}
+{% load static %}
+
+{% block cssblock %}
+    <style>
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    {% if status %}
+        <section id="cart_items">
+            <div class="container">
+                <div class="breadcrumbs">
+                    <ol class="breadcrumb">
+                        <li><a href="#">خانـه</a></li>
+                        <li class="active">پرداخت</li>
+                    </ol>
+                </div><!--/breadcrums-->
+                {# --------------------------------------- #}
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-md-12 col-sm-12">
+                            <div class="features_items"><!--features_items-->
+                                <h2 class="title text-center">سبد خرید </h2>
+
+                                {% for detail in DetailOrder %}
+                                    <div class="col-md-3 col-sm-4 ">
+                                        <div class="product-image-wrapper">
+                                            <div class="single-products">
+                                                <div class="productinfo text-center">
+                                                    {% thumbnail detail.detail_product.image "268x250" crop="center" as im %}
+                                                        <img src="{{ im.url }}" width="{{ im.width }}"
+                                                             height="{{ im.height }}">
+                                                    {% endthumbnail %}
+                                                    <h4 class="substrname">{{ detail.detail_product.product.name }}</h4>
+                                                    <h3 style="color: #FE980F">{{ detail.return_price }} ريال</h3>
+
+                                                    <span style="display: inline-block">
+                                                 <div style="width: 35px;height: 35px;border-radius:50%;background: {{ detail.detail_product.color_code }}"></div>
+                                                        {% if detail.detail_pooshak %}
+                                                            {{ detail.detail_pooshak.size }}
+                                                        {% endif %}
+                                            </span>
+                                                    <p>
+                                                    <p class="cart_quantity_button" style="text-align: center">
+                                            <span style="display: inline-block">
+                                    <a class="cart_quantity_up"
+                                       onclick="ChangeCourtOrder('plus','{{ detail.id }}','{{ detail.count }}')"
+                                       href=""> + </a>
+                                    <input class="cart_quantity_input" readonly type="text" name="quantity"
+                                           style="margin-bottom: 5px"
+                                           value="{{ detail.count }}" autocomplete="off" size="2">
+                                    <a class="cart_quantity_down"
+                                       onclick="ChangeCourtOrder('dec','{{ detail.id }}','{{ detail.count }}')" href="">
+                                        - </a>
+                                            </span>
+                                                    </p>
+                                                    </p>
+                                                    <a href="#" onclick="DeleteCart('{{ detail.id }}')" class="btn btn-default add-to-cart">حذف سفارش</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+
+                            </div><!--features_items-->
+                        </div>
+
+
+                    </div>
+                </div>
+                {# ------------------------------------------------- #}
+
+            </div>
+            <hr style="width: 90%;height:1px;background: #FE980F">
+        </section> <!--/#cart_items-->
+
+        <section id="do_action">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="chose_area">
+                            <h3><i class="fa fa-map-marker" aria-hidden="true"></i>
+                                انتخاب ادرس</h3>
+                            {% for address in Address %}
+                                <ul class="user_info">
+
+                                    <li class="single_field">
+                                        <label>استان :</label>
+                                        <div class="form-control">
+                                            {{ address.state }}
+                                        </div>
+
+                                    </li>
+                                    <li class="single_field">
+                                        <label>شهر / منطقه</label>
+
+                                        <div class="form-control">
+                                            {{ address.city }}
+                                        </div>
+
+                                    </li>
+                                    <li class="single_field zip-field">
+                                        <label>کد پستی :</label>
+                                        <div class="form-control">
+                                            {{ address.post_code }}
+                                        </div>
+                                    </li>
+                                    <li style="width: 80%">
+                                        <label>جزئیات آدرس:</label>
+                                        <div class="form-control">{{ address.address }}</div>
+                                    </li>
+                                    <li>
+                                        <label>انتخاب:</label>
+                                        <input value="{{ address.id }}" {% if forloop.first %} checked {% endif %}
+                                               name='choose_address' style="accent-color: #5e5e5e" class="form-control"
+                                               type="radio">
+
+                                    </li>
+                                </ul>
+
+                                <hr style="width: 100%;height:1px;background: #FE980F">
+                            {% endfor %}
+                            <a class="btn btn-default update" href="{% url 'add_address' %}">افزودن آدرس</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="total_area">
+                            <ul>
+                                <li>مجمـوع سبـد خریـد <span>
+                                {{ price_prodducts }}تومان</span></li>
+                                <li>هزینـه حمل و نقـل <span>30هزار تومان</span></li>
+                                <li>مجمـوع <span>{{ price_post }}تومان</span></li>
+                            </ul>
+
+                            <a class="btn btn-default update" onclick="Pay_Money()" style="width: 48%">پرداخت</a>
+                            <a onclick="checkcart()" class="btn btn-default update pull-left" style="width: 48%">بروز
+                                رسانی</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!--/#do_action-->
+    {% else %}
+        <h3 style="color: red;text-align: center;margin:50px">محصولی در سبد خرید شما موجود نیست</h3>
+    {% endif %}
+{% endblock %}
+{% block addscript %}
+    <script>
+        function DeleteCart(id) {
+            $.get('deletecart/' + id).then(res => {
+                if (res.status) {
+                    Swal.fire(
+                        'محصول مورد نظر از سبد خرید شما حذف شد!',
+                        '',
+                        'success')
+                    window.location.reload();
+                }
+            });
+        }
+
+        {# ############################ #}
+
+        function ChangeCourtOrder(verb, id, count) {
+            if (count > 1 || verb == 'plus') {
+                $.get('change_count?verb=' + verb + '&id=' + id).then(res => {
+                    if (!res.status) {
+                        swal.fire(
+                            'عدم موجودی انبار',
+                            '',
+                            'error'
+                        )
+                    } else {
+                        window.location.reload();
+                    }
+                });
+            }
+        }
+
+        function checkcart() {
+            $.get('cart/check_cart');
+            window.location.reload();
+        }
+
+        function Pay_Money() {
+            var ID = $('input[name=choose_address]:checked').val();
+            window.location.href = 'http://127.0.0.1:8000/paymoney/' + ID;
+        }
+    let elements=document.getElementsByClassName('substrname');
+        for(var i=0;i<elements.length;i++)
+        {
+            var name=elements[i].textContent;
+            name=name.substring(0,25);
+            name=name+'...';
+
+            elements[i].textContent=name;
+        }
+
+
+    </script>
+{% endblock %}

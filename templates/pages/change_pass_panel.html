@@ -1,0 +1,92 @@
+{% extends 'base/basepage.html' %}
+{% load static %}
+{% load render_partial %}
+{% block content %}
+
+    {# -------------------------------------------------------------- #}
+
+
+    <div class="container">
+        <section id="form"><!--form-->
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-1">
+                    <div class="login-form"><!--login form-->
+                        <h2 class="text-center"> حساب کاربـری </h2>
+                        <form action="#">
+
+                            {% render_partial 'Accounts.views.partial_view' %}
+
+
+                        </form>
+                    </div><!--/login form-->
+                </div>
+                {#                <div class="col-sm-1">#}
+                {#                    <h2 class="or">یا</h2>#}
+                {#                </div>#}
+                <div class="col-sm-4">
+                    <div class="signup-form"><!--sign up form-->
+                        <h2 class="text-center">تغییر رمز <i class="fa fa-lock" aria-hidden="true"></i></h2>
+                        <form action="#" method="post">
+
+                            {% csrf_token %}
+                            {% for field in form %}
+                                {{ field.label }}
+                                {{ field }}
+                                <p style="color: red !important">
+                                    {{ field.errors }}
+                                </p>
+                            {% endfor %}
+
+                            <button type="submit" class="btn btn-default">تغییر</button>
+                        </form>
+                        {% if status %}
+                        <script>
+                        swal.fire(
+                            'پسورد با موفقیت ویرایش شد',
+                            '',
+                            'success',
+                        )
+                        </script>
+                    {% endif %}
+                    </div><!--/sign up form-->
+                </div>
+            </div>
+        </section>
+    </div>
+    <!--/form-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}

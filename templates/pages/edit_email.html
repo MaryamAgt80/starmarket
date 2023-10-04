@@ -1,0 +1,59 @@
+{% extends 'base/basepage.html' %}
+{% load static %}
+{% load render_partial %}
+{% block content %}
+
+    {# -------------------------------------------------------------- #}
+
+
+    <div class="container">
+        <section id="form"><!--form-->
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-1">
+                    <div class="login-form"><!--login form-->
+                        <h2 class="text-center">  <i class="fa fa-user"></i> حساب کاربـری </h2>
+                        <form action="#">
+
+                            {% render_partial 'Accounts.views.partial_view' %}
+
+
+                        </form>
+                    </div><!--/login form-->
+                </div>
+                {#                <div class="col-sm-1">#}
+                {#                    <h2 class="or">یا</h2>#}
+                {#                </div>#}
+                <div class="col-sm-4">
+                    <div class="signup-form"><!--sign up form-->
+                        <h2 class="text-center">ویرایش ایمیل <i class="fa fa-edit" aria-hidden="true"></i></h2>
+                        <form action="" method="post">
+
+                            {% csrf_token %}
+                             ایمیل شما:  {{ email }}
+                        <br>
+                            {% for field in form %}{{ field.label }}:
+                                {{ field }}
+                                <p style="color: red !important">
+                                    {{ field.errors }}
+                                </p>
+
+                            {% endfor %}
+                              <p style="color: #3A3A3A">{{ massage }}</p>
+                            <input type="submit" class="btn btn-default" style="background: #FE980F;color: #FFFFFF" value="ویرایش">
+                        </form>
+                           {% if status %}
+                        <script>
+                        swal.fire(
+                            'ویرایش ایمیل',
+                            'ایمیل وارد شده ثبت شد برای فعالسازی به لینک ارسال شده به ایمیل خود مراجعه کنید',
+                            'success',
+                        )
+                        </script>
+                    {% endif %}
+                    </div><!--/sign up form-->
+                </div>
+            </div>
+        </section>
+    </div>
+
+{% endblock content %}

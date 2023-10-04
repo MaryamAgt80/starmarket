@@ -1,0 +1,28 @@
+
+  <div class="form-control text-center my-2">
+      <a href="/admin" class="nav-link " style="color:#696763;{% if request.path == '/admin' %}color:#FD9B18;{% endif %}">پنل رسمی ادمین <i class="fa fa-table" aria-hidden="true"></i></a>
+
+ </div>
+  <div class="form-control text-center my-2">
+      <a href="{% url 'massege_admin' %}" class="nav-link " style="color:#696763;{% if request.resolver_match.url_name == 'change_pass' %}color:#FD9B18;{% endif %}">پیام های دریافتی خوانده نشده <i class="fa fa-comment" aria-hidden="true"></i></a>
+  </div>
+
+
+    <div class="form-control text-center my-2">
+        <a href="{% url 'edit_profile' %}" class="nav-link " style="color:#696763;{% if request.resolver_match.url_name == 'edit_profile' %}color:#FD9B18;{% endif %}">ویرایش اطلاعات  <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+  </div>
+<div class="form-control text-center my-2">
+    <a href="{% url 'edit_email' %}" class="nav " style="color:#696763;{% if request.resolver_match.url_name == 'edit_email' %}color:#FD9B18;{% endif %}">تغییر ایمیل  <i class="fa fa-envelope" aria-hidden="true"></i>
+</a>
+  </div>
+  <div class="form-control text-center my-2">
+      <a href="{% url "change_pass" %}" class="nav-link " style="color:#696763;{% if request.resolver_match.url_name == 'change_pass' %}color:#FD9B18;{% endif %}">تغییر پسورد  <i class="fa fa-lock" aria-hidden="true"></i></a>
+  </div>
+
+  <div class="form-control text-center my-2">
+    <a href="{% url 'cart' %}" class="nav-link " style="color:#696763;{% if request.resolver_match.url_name == 'cart' %}color:#FD9B18;{% endif %}">  سبد خرید  <i class="fa fa-shopping-cart"></i></a>
+</div>
+<div class="form-control text-center my-2">
+  <a href="{% url 'address_page' %}" class="nav-link " style="color:#696763;{% if request.resolver_match.url_name == 'address_page' %}color:#FD9B18;{% endif %}">ادرس های من  <i class="fa fa-book" aria-hidden="true"></i>
+</a>
+</div>

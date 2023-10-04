@@ -1,0 +1,6 @@
+<select id="city" style="margin-bottom: 5px;text-align: center">
+                            <option value="">-----------</option>
+                                {% for city in Cities %}
+                                    <option value="{{ city }}">{{ city }}</option>
+                                {% endfor %}
+                            </select>

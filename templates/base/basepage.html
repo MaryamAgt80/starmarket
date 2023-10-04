@@ -1,0 +1,165 @@
+{% load static %}
+{% load render_partial %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StarMarket</title>
+    {# --------------------------css link-------------------------- #}
+
+
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/font-awesome.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/prettyPhoto.css" %}" rel="stylesheet">
+    <link href="{% static "css/price-range.css" %}" rel="stylesheet">
+    <link href="{% static "css/animate.css" %}" rel="stylesheet">
+	<link href="{% static "css/main.css"  %}" rel="stylesheet">
+	<link href="{% static "css/responsive.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static "images/ico/apple-touch-icon-144-precomposed.png"%}">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static "images/ico/apple-touch-icon-114-precomposed.png"%}">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static "images/ico/apple-touch-icon-72-precomposed.png"%}">
+    <link rel="apple-touch-icon-precomposed" href="{% static "images/ico/apple-touch-icon-57-precomposed.png"%}">
+{#    <script src="sweetalert2.all.min.js"></script>#}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+     {# --------------------------end css link-------------------------- #}
+    {% block cssblock %}
+    {% endblock cssblock %}
+</head>
+<body>
+{# ------------------------------ header  ---------------------------- #}
+	<header id="header">
+		<div class="header_top"><!--header_top-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="contactinfo">
+							<ul class="nav nav-pills">
+								<li><a href="#"><i class="fa fa-phone"></i> 80 21 24 36 98+ </a></li>
+								<li><a href="#"><i class="fa fa-envelope"></i> info@domain.com</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="social-icons pull-right">
+							<ul class="nav navbar-nav">
+								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+								<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+								<li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+								<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/header_top-->
+
+		<div class="header-middle">
+			<div class="container">
+				<div class="row">
+
+
+					<div class="col-sm-4" style="text-align: left;">
+						<div class="logo">
+							<a href="index.html"><img src="{% static "images/home/logo.png"%}" alt="Logo" style="text-align: center;" /></a>
+						</div>
+					</div>
+
+					<div class="col-sm-8 header-middle-menu">
+						<div class="shop-menu pull-right">
+							<ul class="nav navbar-nav">
+                            {% if request.user.is_superuser %}
+                   		<li><a href="{% url 'panel-admin' %}" class="{% if  request.resolver_match.url_name == 'panel-admin'  %} active{% endif %}"><i class="fa fa-users"></i> پنل ادمین</a></li>
+
+                            {% else %}
+								<li><a href="{% url 'panel-account' %}" class="{% if  request.resolver_match.url_name == 'panel-account'  %} active{% endif %}"><i class="fa fa-user"></i> حساب کاربـری</a></li>
+                            {% endif %}
+								<li><a href="{% url 'like_list' %}" class="{% if  request.resolver_match.url_name == 'like_list'  %} active{% endif %}"><i class="fa fa-star"></i> لیست علاقه مندی ها</a></li>
+                                {% if request.user.is_authenticated %}
+								<li><a href="{% url 'logout' %}"><i class="fa fa-lock"></i> خروج</a></li>
+                                {% else %}
+                                    <li><a href="{% url 'login' %}" class="{% if  request.resolver_match.url_name == 'login'  %} active{% endif %}"><i class="fa fa-lock"></i> ورود</a></li>
+                                    <li><a href="{% url 'sign'  %}" class="{% if  request.resolver_match.url_name == 'sign'  %} active{% endif %}"><i class="fa fa-lock"></i> ثبت نام </a></li>
+                                {% endif %}
+								<li><a href="{% url 'cart' %}" class="{% if  request.resolver_match.url_name == 'cart'  %} active{% endif %}"><i class="fa fa-shopping-cart"></i> سبد خریـد</a></li>
+                                </ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/header-middle-->
+
+		<div class="header-bottom"><!--header-bottom-->
+			<div class="container">
+				<div class="row">
+
+					<div class="col-sm-3">
+						<div class="search_box pull-left" style="background: #F0F0E9">
+
+							<input type="text" style="background: #F0F0E9 !important;" name="search_field" placeholder="جستـجو"/>
+                            <input type="button" style="width: 35px;" onclick="get_search()">
+						</div>
+					</div>
+
+					<div class="col-sm-9">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+						</div>
+						<div class="mainmenu pull-right">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="{% url 'ShowFirstPage' %}" class="{% if  request.resolver_match.url_name == 'ShowFirstPage'  %} active{% endif %}">خـانه</a>
+
+
+                                 <ul role="menu" class="sub-menu">
+
+                <li><a href="{% url 'products'  %}"
+                       value="{{ categorize.id }}">تمام محصولات</a></li>
+
+
+
+        </ul>
+
+
+
+                                </li>
+                                {% render_partial 'Product.views.render_cate_base' %}
+								<li><a href="{% url 'about_us' %}" class="{% if  request.resolver_match.url_name == 'about_us'  %} active{% endif %}">درباره مـا</a></li>
+								<li><a href="{% url 'contact_us' %}" class="{% if  request.resolver_match.url_name == 'contact_us'  %} active{% endif %}">تماس با مـا</a></li>
+
+                            </ul>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div><!--/header-bottom-->
+	</header>
+{# ------------------------------end header  ---------------------------- #}
+{% block content %}
+{% endblock content %}
+{# -----------------------------footer-------------------------- #}
+  {% render_partial 'Site_App.views.panel_footer' %}
+    <script src="{%  static "js/jquery.js" %}"></script>
+	<script src="{%  static "js/bootstrap.min.js" %}"></script>
+	<script src="{%  static "js/jquery.scrollUp.min.js" %}"></script>
+	<script src="{%  static "js/price-range.js" %}"></script>
+    <script src="{%  static "js/jquery.prettyPhoto.js" %}"></script>
+    <script src="{%  static "js/main.js" %}"></script>
+<script src="sweetalert2.all.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static "js/my_file.js" %}"></script>
+    {% block addscript %}
+    {% endblock addscript %}
+
+{# ---------------------------endfooter------------------------- #}
+</body>
+</html>

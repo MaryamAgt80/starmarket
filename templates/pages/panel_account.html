@@ -1,0 +1,33 @@
+{% extends 'base/basepage.html' %}
+{% load static %}
+{% load render_partial %}
+{% block content %}
+
+<div class="container ">
+		<section id="form"><!--form-->
+			<div class="row text-center">
+				<div class="col-sm-4 col-sm-offset-1">
+					<div class="login-form text-center"><!--login form-->
+						<h2 class="text-center">
+                     حساب کاربری
+                            <i class="fa fa-user"></i>
+                        </h2>
+						<form action="#">
+                          {%  render_partial 'Accounts.views.partial_view'  %}
+						</form>
+					</div><!--/login form-->
+				</div>
+
+
+
+
+
+
+			</div>
+		</section>
+	</div>
+
+
+
+
+{% endblock content %}

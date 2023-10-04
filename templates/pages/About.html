@@ -1,0 +1,55 @@
+{% extends 'base/basepage.html' %}
+{% load static %}
+{% load thumbnail %}
+{% block content %}
+
+    <div id="contact-page" class="container">
+        <div class="bg">
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="contact-info">
+                        <h2 class="title text-center">لوگـو شرکت</h2>
+                        <img src="{{ About.logo.url }}">
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="about">
+                        <h2 class="title text-center">دربـاره ما</h2>
+                        <p class="about-desc">
+                            {{ About.about_us }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 about-address">
+                    <address>
+                        <p>{{ Contact.name_gap }} | {{ Contact.address_contact }} | {{ Contact.address_detail }} -
+                            | تلفن تماس : {{ Contact.phone_number }} | فکس :{{ Contact.fax }} | ایمیـل
+                            : {{ Contact.email }}
+                        </p>
+                    </address>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="container">
+                    <div class="col-sm-12" style="overflow: hidden; margin-bottom: 40px"><h2 class="title text-center">
+                        مـا
+                        اینجـا هستیـم ... </h2>
+                        <div id="gmap" class="contact-map">
+                            {% thumbnail Contact.image_address "1280x688" crop="center" as im %}
+                                <img id="DetailImage" src="{{ im.url }}"
+                                     width="{{ im.width }}"
+                                     height="{{ im.height }}" alt="map">
+                            {% endthumbnail %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div><!--/#contact-page-->
+{% endblock %}

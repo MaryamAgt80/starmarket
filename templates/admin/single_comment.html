@@ -1,0 +1,83 @@
+{% extends 'base/basepage.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load render_partial %}
+{% block content %}
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-8" style="margin-top: 10px">
+
+                <div class="media g-mb-30 media-comment around_comment">
+                    <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
+                        <h4>عنوان:{{ comment.title }}</h4>
+                        <h5>نام:{{ comment.user.name }} {{ comment.user.lname }}</h5>
+                        <br>
+                        <p style="color: #696763">{{ comment.message }}</p>
+
+                        </button>
+                        <button onclick="ChangeRead('{{ comment.id }}')" class="btn pull-left"
+                                style="background: #FE980F;margin-left: 2px;color: #FFFFFF">علامت زدن به عنوان خوانده شده
+                        </button>
+                         <button  class="btn pull-left"
+                                 style="background: #FE980F;margin-left: 2px"><a href="http://127.0.0.1:8000/admin/Accounts/user/{{ comment.user.id }}/change/" style="color: #FFFFFF;">مشاهده اطلاعات کاربر</a>
+                        </button>
+
+
+                    </div>
+                </div>
+              	<div class="contact-form" style="margin-top: 5px">
+	    				<h2 class="title text-center">پاسخ شما به پیام کاربر</h2>
+	    				<div class="status alert alert-success" style="display: none"></div>
+				    	<form id="main-contact-form" class="contact-form row" name="contact-form" method="post">
+                      {% csrf_token %}
+
+				            <div class="form-group col-md-12">
+				                <textarea name="message" id="message" required class="form-control" rows="8" placeholder="پاسخ شمـا"></textarea>
+				            </div>
+				            <div class="form-group col-md-12">
+				                <input type="submit" name="submit"  style="width: 180px" class="btn btn-primary pull-left" value="ارسـال">
+				            </div>
+				        </form>
+                    {% if status %}
+                        <script>
+                        swal.fire(
+                            'پیام شما فرستاده شده',
+                            '',
+                             'success'
+                        )
+                        </script>
+                    {% endif %}
+	    			</div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="login-form text-center"><!--login form-->
+                    <h2 class="text-center">
+                        پنل ادمین
+                        <i class="fa fa-users"></i>
+                    </h2>
+                    <form action="#">
+                        {% render_partial 'Accounts.views.render_panel_admin' %}
+
+
+                    </form>
+                </div><!--/login form-->
+
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}
+{% block addscript %}
+    <script>
+        function ChangeRead(id) {
+            $.get('massege/delete?id=' + id).then(res => {
+                window.location.href='http://127.0.0.1:8000/accounts/massege';
+            })
+        }
+    </script>
+{% endblock %}

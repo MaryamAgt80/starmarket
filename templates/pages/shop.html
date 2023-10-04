@@ -1,0 +1,140 @@
+{% extends 'base/basepage.html' %}
+{% load thumbnail %}
+{% load static %}
+{% load render_partial %}
+{% block content %}
+    <section id="advertisement">
+        <div class="container">
+            <img src="{% static "images/shop/advertisement.jpg" %}" alt=""/>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="row">
+
+                <div id="replace_products" class="col-sm-9 padding-right">
+                    <div class="features_items"><!--features_items-->
+                        <h2 class="title text-center">محصولات </h2>
+
+                        {% for product in Products %}
+                            <div class="col-sm-4">
+                                <div class="product-image-wrapper">
+                                    <div class="single-products">
+                                        <div class="productinfo text-center">
+                                        {% if product.CountAll == 0 %}
+                                                <div style="height: 40px;width: 40px;border-radius: 50%;background: #FD9B18;padding-top: 7px;color: #696763;position: absolute;right: 0;top: 0">
+                                                    ناموجود
+                                                </div>
+                                            {% endif %}
+                                            {% thumbnail product.ProductMain.first.image "268x250" crop="center" as im %}
+                                                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                                            {% endthumbnail %}
+                                          <h4 style="color: #5e5e5e" class="substrname">{{ product.name }}</h4>
+                                            <h4 style="color: #FE980F">{{ product.price }} تومان</h4>
+
+                                            <a href="{% url "detail" id=product.id %}" class="btn btn-default add-to-cart">مشاهده جزئیات</a>
+                                        </div>
+                                        <div class="product-overlay">
+                                            <div class="overlay-content">
+                                                <h3 style="color: #fff">{{ product.price }} ريال</h3>
+
+                                                <a href="{% url "detail" id=product.id %}" class="btn btn-default add-to-cart">مشاهده جزئیات</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% if paginator.num_pages > 1 %}
+                        <ul class="pagination">
+                            {% if page_obj.has_next %}
+                                <li><a href="?page={{ page_obj.next_page_number }}">بعدی</a></li>
+                            {% endif %}
+
+                            {% for pageNum in paginator.page_range %}
+                                <li><a
+                                         style="{% if page_obj.number == pageNum %}background: #FE980F;{% endif %}"
+                                        href="?page={{ pageNum }}">{{ pageNum }}</a></li>
+                            {% endfor %}
+
+                            {% if page_obj.has_previous %}
+                                <li><a
+                                        href="?page={{ page_obj.previous_page_number }}">قبلی</a></li>
+                            {% endif %}
+                        </ul>
+                    {% endif %}
+
+                    </div><!--features_items-->
+                </div>
+
+
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+                        <h2>دسته بندی محصولات</h2>
+                        <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+                           {% render_partial 'Product.views.render_categorize' %}
+                        </div><!--/category-productsr-->
+                          <div class="brands_products"><!--brands_products-->
+                            <h2>برنـد ها</h2>
+                           {% render_partial 'Product.views.render_brands' %}
+                        </div><!--/brands_products-->
+
+                        {% if min_range and max_range %}
+                        <div class="price-range"><!--price-range-->
+                            <h2>فیلتـر قیمـت</h2>
+                            <div class="well" style="text-align: center">
+                                <input  type="text" name="min" class="span2" value="{{ range_price }}" data-slider-min="{{ min_range }}" data-slider-max="{{ max_range }}"
+                                       data-slider-step="5" data-slider-value="[250,450]" id="sl2"><br/>
+                                <b>{{ max_range}} تومان</b> <b class="pull-left">{{ min_range}}تومان</b>
+
+
+
+                                <button class="btn" onclick="filter()" style="margin-top: 5px;background: #FE980F;color: #FFFFFF">اعمال فیلتر</button>
+
+
+                            </div>
+                        </div><!--/price-range-->
+                        {% endif %}
+                        <div class="shipping text-center"><!--shipping-->
+                            <img src="images/home/shipping.jpg" alt=""/>
+                        </div><!--/shipping-->
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+{% block addscript %}
+    <script>
+     let elements=document.getElementsByClassName('substrname');
+        for(var i=0;i<elements.length;i++)
+        {
+            var name=elements[i].textContent;
+            name=name.substring(0,25);
+            name=name+'...';
+
+            elements[i].textContent=name;
+        }
+        function filter()
+        {
+            var range_price=$('input[name=min]').val();
+
+            $.get('?range_price='+range_price).then(res=>{
+                $('#replace_products').html(res);
+
+            });
+        }
+        function change_page(page_number){
+             var range_price=$('input[name=min]').val();
+            $.get('?page='+page_number+'&range_price='+range_price).then(res=>{
+                $('#replace_products').html(res);})
+            console.log(res);
+        }
+
+
+    </script>
+{% endblock %}

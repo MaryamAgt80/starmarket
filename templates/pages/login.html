@@ -1,0 +1,31 @@
+{% extends 'base/basepage.html' %}
+{% block content %}
+	<div class="container">
+		<section id="form"><!--form-->
+			<div class="row ">
+				<div class="col-sm-4 col-sm-offset-4">
+					<div class="login-form"><!--login form-->
+						<h2>{{ caption }}</h2>
+						<form name="loginform" method="post">
+                            {% csrf_token %}
+							{% for field in form %}
+                                {{ field.label }}
+                                {{ field }}
+                                <p style="color: red !important">
+                                {{ field.errors }}
+                                </p>
+                            {% endfor %}
+							<span>
+                                {% if caption == 'ورود به حساب' %}
+								<a href="{% url 'forgot_pass' %}">رمـز عبـور خود را فراموش کرده ام</a>
+                                {% endif %}
+							</span>
+							<button type="submit" class="btn btn-default">{{ caption_button }}</button>
+						</form>
+					</div><!--/login form-->
+				</div>
+			</div>
+		</section>
+	</div>
+	<!--/form-->
+	{% endblock content %}

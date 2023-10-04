@@ -1,0 +1,55 @@
+{% extends 'base/basepage.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load render_partial %}
+{% block content %}
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-8" style="margin-top: 10px">
+                {% for comment in Comments %}
+                    <div class="media g-mb-30 media-comment around_comment">
+                    <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
+                       <h4>{{ comment.title }}</h4>
+                        <h5>{{ comment.user.name }} {{ comment.user.lname }}</h5>
+                        <br>
+                            <p style="color: #696763">{{ comment.message }}</p>
+                        <button class="btn pull-left" style="background: #FE980F;"><a style="color: #FFFFFF" href="comment/single/{{ comment.id }}">پاسخ</a></button>
+                        <button onclick="ChangeRead('{{ comment.id }}')" class="btn pull-left" style="background: #FE980F;color:#FFFFFF;margin-left: 2px">علامت زدن به عنوان خوانده شده</button>
+
+
+                        </div>
+                    </div>
+                {% endfor %}
+
+                </div>
+                <div class="col-md-4">
+                    <div class="login-form text-center"><!--login form-->
+                        <h2 class="text-center">
+                            پنل ادمین
+                            <i class="fa fa-users"></i>
+                        </h2>
+                        <form action="#">
+                            {% render_partial 'Accounts.views.render_panel_admin' %}
+
+
+                        </form>
+                    </div><!--/login form-->
+
+                </div>
+
+
+            </div>
+        </div>
+{% endblock %}
+{% block addscript %}
+    <script>
+    function ChangeRead(id){
+     $.get('massege/delete?id='+id).then(res=>{
+    window.location.reload();
+     })
+    }
+    </script>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% for categorize in Categorize %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordian" href="#sportswear{{ categorize.id }}">
+                    <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                    {{ categorize.title }}
+                </a>
+            </h4>
+        </div>
+        <div id="sportswear{{ categorize.id }}" class="panel-collapse collapse">
+            <div class="panel-body">
+                <ul>
+                    {% for item in categorize.subset.all %}
+                        <li>-<a href="{% url 'categorize' cate=item.cate_name %}">
+                            {{ item.title }} </a></li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,11 @@
+<div class="brands-name">
+                                <ul class="nav nav-pills nav-stacked">
+                                    {% for item in Brands %}
+                                        {% if item.brand_product.count > 0 %}
+                                        <li><a href="{% url 'brand' brand=item.url_field %}"> <span
+                                                class="pull-left">({{ item.brand_product.count }})</span>{{ item.brand }}</a>
+                                        </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>

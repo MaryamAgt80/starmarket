@@ -1,0 +1,15 @@
+{% for categorize in Categorize %}
+    <li class="dropdown"><a href="{% url 'categorize' cate=categorize.cate_name %}"
+                            class="{% if  request.path == '/cate/'|add:categorize.cate_name or request.path == par %}active{% endif %}"
+                            id="cate{{ categorize.id }}">{{ categorize.title }}<i class="fa fa-angle-down"></i></a>
+
+        <ul role="menu" class="sub-menu">
+            {% for cate in categorize.subset.all %}
+                <li><a href="{% url 'categorize' cate=cate.cate_name %}"
+                       value="{{ categorize.id }}">{{ cate.title }}</a></li>
+
+            {% endfor %}
+
+        </ul>
+    </li>
+{% endfor %}

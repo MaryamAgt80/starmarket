@@ -1,0 +1,34 @@
+{% extends 'base/basepage.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load render_partial %}
+{% block content %}
+    <div class="container ">
+		<section id="form"><!--form-->
+			<div class="row text-center">
+				<div class="col-sm-8 col-sm-offset-2">
+					<div class="login-form text-center"><!--login form-->
+						<h2 class="text-center">
+                     پنل ادمین
+                            <i class="fa fa-users"></i>
+                        </h2>
+						<form action="#">
+                         {% render_partial 'Accounts.views.render_panel_admin' %}
+
+
+						</form>
+					</div><!--/login form-->
+
+				</div>
+
+
+
+
+
+
+			</div>
+		</section>
+	</div>
+
+
+{% endblock %}

@@ -1,0 +1,126 @@
+{% extends 'base/basepage.html' %}
+{% load static %}
+{% load thumbnail %}
+{% block content %}
+
+    <div id="contact-page" class="container">
+        <div class="bg">
+            <div class="row">
+                <div class="container">
+                    <div class="col-sm-12" style="overflow: hidden; margin-bottom: 40px">
+                        <h2 class="title text-center">تمـاس با مـا</h2>
+                        <div id="gmap" class="contact-map">
+                            {% thumbnail Contact_Info.image_address "1280x688" crop="center" as im %}
+                                <img id="DetailImage" src="{{ im.url }}"
+                                     width="{{ im.width }}"
+                                     height="{{ im.height }}" alt="map">
+                            {% endthumbnail %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="contact-form">
+                        <h2 class="title text-center">با ما در ارتباط باشیـد</h2>
+                        <div class="status alert alert-success" style="display: none"></div>
+                        <form id="main-contact-form" class="contact-form row" name="contact-form" method="post">
+                            {% if request.user.is_authenticated %}
+                                {% csrf_token %}
+                                {% for item in form %}
+                                    <div class="form-group {% if item.name == 'message' %} col-md-12 {% else %} col-md-6 {% endif %}">
+                                        {{ item.label }}:
+                                        {{ item }}
+                                        {{ item.error }}
+                                    </div>
+                                {% endfor %}
+                                {% if state == True %}
+
+                                    <script>
+                                        swal.fire(
+                                            'پیام شما با موفقیت ثبت شد',
+                                            '',
+                                            'success'
+                                        )
+                                        var inputitem=document.getElementsByClassName('input')
+                                        for(var i;i<inputitem.length;i++)
+                                        {
+                                            inputitem[i].innerHTML='';
+                                        }
+                                    </script>
+                                {% endif %}
+                                <p class="text-warning">
+                                    {{ status }}
+
+                                </p>
+                                <div class="form-group col-md-12">
+                                    <input type="submit" name="submit" class="btn btn-primary pull-right"
+                                           onsubmit="swal_ok('{{ state }}')" value="ارسـال">
+                                </div>
+                            {% else %}
+                                <p class="text-center text-warning">
+                                    {{ form }}
+                                </p>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="contact-info">
+                        <h2 class="title text-center">اطلاعات تماس</h2>
+                        <address>
+                            <p>{{ Contact_Info.name_gap }}</p>
+                            <p>{{ Contact_Info.address_contact }}</p>
+                            <p>{{ Contact_Info.address_detail }}</p>
+                            <p>تلفن تماس :{{ Contact_Info.phone_number }}</p>
+                            <p>فکس : {{ Contact_Info.fax }}</p>
+                            <p style="font-family: tahoma;">ایمیـل : {{ Contact_Info.email }}</p>
+                        </address>
+                        <div class="social-networks">
+                            <h2 class="title text-center">شبکـه های اجتـماعی</h2>
+                            <span class="socials-share share">
+									<ul>
+										<a href="{{ Contact_Info.id_bale }}">
+											<li>
+												<label>بلـه</label>
+												<img src="{% static "images/product-details/Bale.png" %}"/>
+											</li>
+										</a>
+										<a href="{{ Contact_Info.id_soroosh }}">
+											<li>
+												<label>سـروش</label>
+												<img src="{% static "images/product-details/Soroush.png" %}"/>
+											</li>
+										</a>
+										<a href="{{ Contact_Info.id_insta }}">
+											<li>
+												<label>اینستاگرام</label>
+												<img src="{% static "images/product-details/Instagram.png" %}"/>
+											</li>
+										</a>
+									</ul>
+								</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--/#contact-page-->
+
+{% endblock %}
+{% block addscript %}
+    <script>
+        function swal_ok(status) {
+            if (status == 'True') {
+                swal.fire(
+                    'پیام شما با موفقیت ثبت شد',
+                    '',
+                    'success'
+                )
+            }
+        }
+        document.getElementsByTagName('textarea')[0].style.background='#fff';
+        document.getElementsByTagName('textarea')[0].style.border='1px solid #ddd';
+    </script>
+{% endblock %}

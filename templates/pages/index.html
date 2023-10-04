@@ -1,0 +1,182 @@
+{% extends 'base/basepage.html' %}
+{% load static %}
+{% load humanize %}
+{% load thumbnail %}
+{% load render_partial %}
+{% block content %}
+
+    <section id="slider">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="slider-carousel" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            {% for item in Slider %}
+                            <li data-target="#slider-carousel" data-slide-to="{{ item.id }}" class="{% if forloop.first %}active{% endif %}"></li>
+                            {% endfor %}
+{#                            <li data-target="#slider-carousel" data-slide-to="1"></li>#}
+                        </ol>
+
+                        <div class="carousel-inner " style="text-align: center;">
+
+
+                            {% for item in Slider %}
+                                <div class="item {% if forloop.first %} active {% endif %} ">
+                                    <div class="col-sm-12 text-center" style="margin-left: auto;margin-right: auto">
+
+                                        <a href="{{ item.url_slider }}"> <img width="100%" height="250px"
+                                                                              src="{{ item.image.url }}"
+                                                                              class="girl img-responsive" alt=""/>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+                        <a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                        <a href="#slider-carousel" class="right control-carousel hidden-xs" data-slide="next">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section><!--/slider-->
+
+
+    <section>
+        <div class="container">
+           {% render_partial 'Product.views.render_brands_pages' %}
+            <div class="col-sm-12 padding-right">
+                <div class="category-tab"><!--category-tab-->
+                    <div class="col-sm-12">
+                        <a href="shop-2.html"><h2 class="title text-center">پرفروش ترین محصولات</h2></a>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane fade active in" id="Tab_001">
+                            {% for product in productsBuy %}
+                                <div class="col-sm-3">
+                                    <div class="product-image-wrapper">
+                                        <div class="single-products">
+                                            <div class="productinfo text-center">
+                                            {% if product.CountAll == 0 %}
+                                                <div style="height: 40px;width: 40px;border-radius: 50%;background: #FD9B18;padding-top: 7px;color: #696763;position: absolute;right: 0;top: 0">
+                                                    ناموجود
+                                                </div>
+                                            {% endif %}
+                                                {% thumbnail product.ProductMain.first.image "268x250" crop="center" as im %}
+                                                    <img src="{{ im.url }}" width="{{ im.width }}"
+                                                         height="{{ im.height }}">
+                                                {% endthumbnail %}
+                                                 <h4 class="substrname" style="color: #696763">{{ product.name }}</h4>
+                                                <h4 style="color:#FE980F;">{{ product.price }}تومان</h4>
+
+
+                                                <a href="{% url 'detail' id=product.id %}"
+                                                   class="btn btn-default add-to-cart"><i
+                                                        class="fa fa-shopping-cart"></i>مشاهده وافزودن به سبـد خریـد</a>
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% if productsBuy.has_previous %}
+                    <a class="left control-carousel hidden-xs" data-slide="prev"
+                       href=?pagebuy={{ productsBuy.previous_page_number }}"
+                       data-slide="prev">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                {% endif %}
+                {% if productsBuy.has_next %}
+                    <a class="right control-carousel hidden-xs" href="?pagebuy={{ productsBuy.next_page_number }}"
+                       data-slide="next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                {% endif %}
+
+
+            </div>
+            {# end porforoosh #}
+            {# offer #}
+            <div class="col-sm-12 padding-right">
+                <div class="category-tab"><!--category-tab-->
+                    <div class="col-sm-12">
+                        <a href="shop-2.html"><h2 class="title text-center">محصولات تخفیف دار</h2></a>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane fade active in" id="Tab_001">
+                            {% for product in productsOffer %}
+                                <div class="col-sm-3">
+                                    <div class="product-image-wrapper">
+                                        <div class="single-products">
+                                            <div class="productinfo text-center">
+                                            {% if product.CountAll == 0 %}
+                                                <div style="height: 40px;width: 40px;border-radius: 50%;background: #FD9B18;padding-top: 7px;color: #696763;position: absolute;right:5px;top: 5px">
+                                                    ناموجود
+                                                </div>
+                                            {% endif %}
+                                                {% thumbnail product.ProductMain.first.image "268x250" crop="center" as im %}
+                                                    <img src="{{ im.url }}" width="{{ im.width }}"
+                                                         height="{{ im.height }}">
+                                                {% endthumbnail %}
+                                                <h4 class="substrname" style="color: #696763">{{ product.name }}</h4>
+                                                <h4 style="color:#FE980F;">{{ product.price }}تومان</h4>
+
+                                                <a href="{% url 'detail' id=product.id %}"
+                                                   class="btn btn-default add-to-cart"><i
+                                                        class="fa fa-shopping-cart"></i>مشاهده وافزودن به سبـد خریـد</a>
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                {% if productsOffer.has_previous %}
+                    <a class="left control-carousel hidden-xs" data-slide="prev"
+                       href=?pageoff={{ productsOffer.previous_page_number }}"
+                       data-slide="prev">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                {% endif %}
+                {% if productsOffer.has_next %}
+                    <a class="right control-carousel hidden-xs" href="?pageoff={{ productsOffer.next_page_number }}"
+                       data-slide="next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                {% endif %}
+            </div>
+            {% render_partial 'Product.views.render_cate_index' %}
+        </div>
+        </div>
+    </section>
+{% endblock content %}
+{% block addscript %}
+    <script>
+       let elements=document.getElementsByClassName('substrname');
+        for(var i=0;i<elements.length;i++)
+        {
+            var name=elements[i].textContent;
+            name=name.substring(0,25);
+            name=name+'...';
+
+            elements[i].textContent=name;
+        }
+
+    </script>
+{% endblock addscript %}

@@ -1,0 +1,12 @@
+{% extends 'base/basepage.html' %}
+{% block content %}
+<div class="container text-center">
+		<div class="logo-404">
+			<a href="index.html"><img src="images/home/logo.png" alt="" /></a>
+		</div>
+		<div class="content-404">
+			<h1> {{ message }}</h1>
+			<h2 class="my-3"><a href="{% url 'ShowFirstPage' %}">برو به صفحـه اصلی</a></h2>
+		</div>
+	</div>
+{% endblock content %}

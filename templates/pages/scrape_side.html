@@ -1,4 +1,8 @@
- <div class="carousel-inner" id="scroll_price">
+<div id="price_slide">
+ <h2 class="title text-center">قیمت محصول در سایت های دیگر</h2>
+  <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+
+<div class="carousel-inner" id="">
 {% for group in group_price %}
     <div class="item  {% if forloop.first %} active {% endif %}">
         {% for item in group %}
@@ -15,4 +19,14 @@
         {% endfor %}
     </div>
 {% endfor %}
+ </div>
+                            <a class="left recommended-item-control" href="#recommended-item-carousel"
+                               data-slide="prev">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a class="right recommended-item-control" href="#recommended-item-carousel"
+                               data-slide="next">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+</div>
 </div>

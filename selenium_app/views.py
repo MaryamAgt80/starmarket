@@ -10,7 +10,7 @@ from requests_html import HTMLSession
 from django.shortcuts import render
 import itertools
 
-def get_price_another(request, name):
+def get_price_another(name):
     session = HTMLSession()
     name = name.replace(' ', '+')
     url = 'https://www.google.com/search?client=firefox-b-d&q=' + name
@@ -64,7 +64,9 @@ def get_price_another(request, name):
 
 
 
-def scrape_price(request: HttpRequest,name_product):
-    PriceAll =get_price_another(request, name_product)
+def scrape_price(request):
+    name_product=request.GET['name_product']
+    print(name_product)
+    PriceAll =get_price_another( name_product)
     l = [PriceAll[i:i + 4] for i in range(0, len(PriceAll), 4)]
     return render(request, 'pages/scrape_side.html', {'group_price': l})

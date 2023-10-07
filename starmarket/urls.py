@@ -30,7 +30,7 @@ urlpatterns = [
     path('paymoney/<int:id>', views.go_to_gateway_view, name='paymony'),
     path('verify', views.callback_gateway_view, name='verify'),
     path('contact/', include('Site_App.urls')),
-
+    path('scrape/', include('selenium_app.urls')),
     path('', include('Product.urls')),
 
 ]

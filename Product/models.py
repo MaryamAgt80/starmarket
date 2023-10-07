@@ -34,18 +34,33 @@ class Product(models.Model):
     offer_price = models.IntegerField(verbose_name='تخفیف', default=0)
     count_buy = models.IntegerField(default=0,verbose_name='تعداد فروش')
     brand_p=models.ForeignKey(BrandProduct,on_delete=models.CASCADE,related_name='brand_product',default='',blank=True,null=True,verbose_name='برند')
-    categorizes=Categorize_Products.objects.all()
-    list_cate = []
-    for cate in categorizes:
-        list_cate.append((cate.cate_name,cate.title))
-    list_cate=tuple(list_cate)
+
+
+    list_cate=(
+        ('Refrigerator','یخچال'),
+        ('Coat','پالتو'),
+        ('Manteu','مانتو'),
+        ('Shoes','کفش'),
+        ('Scarf','روسری شال'),
+        ('Oven','اجاق گاز'),
+        ('Cover','کاور'),
+        ('Bag','کیف'),
+        ('Headset','هندزفری و هدست'),
+        ('Laundry','لباسشویی'),
+        ('TV','تلوزیون'),
+        ('System','لپ تاپ'),
+        ('Pooshak','پوشاک'),
+        ('Appliances','لوازم خانگی'),
+        ('Phone','موبایل'),
+        ('Digital','کالا دیجیتال'),
+    )
 
     categorize = models.CharField(max_length=20, choices=list_cate, default='Digital',verbose_name='دسته بندی')
     list_class = (('Pooshak', 'پوشاک'),
                   ('Phone', 'موبایل'),
                   ('System', 'سیستم'),
                   ('TV', 'تلوزیون'),
-                  ('Laundry', 'لبتسشویی'),
+                  ('Laundry', 'لباسشویی'),
                   ('Refrigerator', 'یخچال'),
                   ('Headset', 'هندزفری و ایر پاد'),
                   ('Bag','کیف و کاور لپ تاپ'),

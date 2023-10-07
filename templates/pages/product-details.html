@@ -4,7 +4,49 @@
 {% load render_partial %}
 {% load thumbnail %}
 {% block cssblock %}
+    <style>
+        .lds-ring {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
 
+        .lds-ring div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border: 8px solid #FE980F;
+            border-radius: 50%;
+            animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: #FE980F transparent transparent transparent;
+        }
+
+        .lds-ring div:nth-child(1) {
+            animation-delay: -0.45s;
+        }
+
+        .lds-ring div:nth-child(2) {
+            animation-delay: -0.3s;
+        }
+
+        .lds-ring div:nth-child(3) {
+            animation-delay: -0.15s;
+        }
+
+        @keyframes lds-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+    </style>
 
 {% endblock %}
 {% block content %}
@@ -213,25 +255,30 @@
                         </form>
                     </div><!--/product-details-->
                     {# start scraper and show price#}
-                    <div class="recommended_items">
-                        <h2 class="title text-center">قیمت محصول در وب سایت های دیگر</h2>
+                    {#                    <div class="recommended_items">#}
+                    <div id="price_slide" style="text-align: center">
+                        <h2 class="title text-center"></h2>
 
-                        <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
-                            <div class="carousel-inner" id="scroll_price">
-                            {% render_partial 'selenium_app.views.scrape_price' name_product=name_product %}
 
+                        <button class="btn"
+                                style="background: #FFFFFF;text-decoration: none;margin-top: 5px;color:#696763;border: #FE980F solid 1px;border-radius: 5px;padding: 20px;"
+                                onclick="show_prices('{{ name_product }}')">
+                            مشاهده قیمت در سایت های دیگر
+                            <div id="spinner" class="css-spinner clickable" style="text-align: center;display: none;"
+                                 onclick="lda.css.show('ring')">
+                                <div class="lds-ring">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                                <div class="name"><i class="i-html"></i></div>
                             </div>
-                            <a class="left recommended-item-control" href="#recommended-item-carousel"
-                               data-slide="prev">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
-                            <a class="right recommended-item-control" href="#recommended-item-carousel"
-                               data-slide="next">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </div>
+
+                        </button>
+
                     </div>
-                    {# end scraper and show price#}
+
                     <br>
                     <br>
                     <div class="category-tab shop-details-tab"><!--category-tab-->
@@ -531,20 +578,18 @@
             document.getElementById('AllImages').style.display = ''
         }
 
-        function simpleFunction() {
-            console.log('kml');
-            var name_product = document.getElementById('product_name').innerText;
 
-            console.log(name_product);
-
+        function show_prices(name_product) {
+            console.log('xlakckmv');
+            document.getElementById('spinner').style.display = '';
             $.get('http://127.0.0.1:8000/scrape?name_product=' + name_product).then(res => {
-                console.log(res)
-                document.getElementById('scroll_price').html(res);
+
+
+                $('#price_slide').html(res);
+
             })
         }
 
-
-        Window.onload = simpleFunction();
 
     </script>
 
